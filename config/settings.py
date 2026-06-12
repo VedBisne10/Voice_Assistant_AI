@@ -18,7 +18,8 @@ SPEECH_RATE = 180
 # Controls the assistant's speaking volume.
 SPEECH_VOLUME = 1.0
 
-# 
+# AI model used to understand queries
+# and generate intelligent responses.
 MODEL_NAME = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
 
 # Number of recent messages to keep as conversation context.
