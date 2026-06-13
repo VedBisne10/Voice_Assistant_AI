@@ -1,5 +1,22 @@
+# Text to speech
 pyttsx3
-SpeechRecognition
+
+# Environment variables
 python-dotenv
+
+# API calls
 requests
-PyAudio
+
+# Audio capture
+sounddevice
+soundfile
+
+# Numerical/audio processing
+numpy
+scipy
+
+# Speech recognition
+faster-whisper
+
+# Model download utilities
+huggingface-hub
