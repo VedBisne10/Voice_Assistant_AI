@@ -25,3 +25,6 @@ LOG_FOLDER = DATA_FOLDER / "logs"
 
 # Assets folder path
 ASSETS_FOLDER = PROJECT_ROOT / "assets"
+
+# Temporary audio file path
+TEMP_AUDIO_FILE = DATA_FOLDER / "temp_audio.wav"

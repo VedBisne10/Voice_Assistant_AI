@@ -1,4 +1,7 @@
-from assistant.speaker import Speaker
+from ai.llm_client import LLMClient
 
-speaker = Speaker()
-speaker.speak("Hello Ved, I am Nova. Nice to meet you.")
+client = LLMClient()
+
+response = client.get_response("Hello, who are you?")
+
+print(response)
