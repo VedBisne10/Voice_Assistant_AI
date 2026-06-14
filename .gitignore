@@ -1,9 +1,10 @@
 .env
 venv\
 __pycache__/
-config/__pycache__/constants.cpython-314.pyc
 *.pyc
 *.pyo
 *.pyd
 .wav
 data/temp_audio.wav
+data/memory.json
+data/conversation_history.json
