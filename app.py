@@ -1,7 +1,4 @@
-from ai.llm_client import LLMClient
+from assistant.orchestrator import Orchestrator
 
-client = LLMClient()
-
-response = client.get_response("Hello, who are you?")
-
-print(response)
+nova = Orchestrator()
+nova.run_once()

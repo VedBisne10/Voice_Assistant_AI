@@ -24,7 +24,7 @@ def load_json(file_path, default=None):
     # If caller doesn't provide a default,
     # use empty dictionary as fallback
     if default is None:
-        default = {}
+        default = []
 
     try:
         # Open file in read mode
