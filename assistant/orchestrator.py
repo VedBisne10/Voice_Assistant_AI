@@ -14,6 +14,8 @@ from ai.memory_manager import MemoryManager
 
 from utils.logger import logger
 
+from config.constants import SYSTEM_PROMPT
+
 
 class Orchestrator:
     """
@@ -46,19 +48,58 @@ class Orchestrator:
         # Convert speech to text
         user_text = self.transcriber.transcribe(audio_file)
 
-        # Stop if no speech detected
+         # Stop if no speech detected
         if not user_text:
             logger.warning("No speech detected")
             return
 
-        # Store user message in history
-        self.memory.add_message("user", user_text)
+        # Extract important memory from user input
+        extracted_memory = self.llm.extract_memory(user_text)
+
+        # Store extracted memory
+        for key, value in extracted_memory.items():
+            self.memory.remember(key, value)
 
         # Get AI response
-        ai_response = self.llm.get_response(user_text)
+        messages = self.build_messages(user_text)
+        ai_response = self.llm.get_response(messages)
 
-        # Store assistant response in history
+        # To avoid duplication of message
+        self.memory.add_message("user", user_text)
         self.memory.add_message("assistant", ai_response)
 
         # Speak response
         self.speaker.speak(ai_response)
+    
+    def build_messages(self, user_text):
+        """
+        Build complete message context for LLM.
+        """
+
+        messages = []
+
+        # System prompt
+        messages.append({
+            "role": "system",
+            "content": SYSTEM_PROMPT
+            })
+
+        # Long-term memory
+        if self.memory.memory:
+            memory_text = f"Known user facts: {self.memory.memory}"
+
+            messages.append({
+                "role": "system",
+                "content": memory_text
+                })
+
+        # Conversation history
+        messages.extend(self.memory.get_history())
+
+        # Current message
+        messages.append({
+            "role": "user",
+            "content": user_text
+            })
+
+        return messages

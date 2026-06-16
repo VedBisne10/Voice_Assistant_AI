@@ -81,10 +81,10 @@ class MemoryManager:
             content (str): message text
         """
 
-        message = [{
+        message = {
             "role": role,
             "content": content
-        }]
+        }
 
         self.history.append(message)
 
