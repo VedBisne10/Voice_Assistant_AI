@@ -1,4 +1,4 @@
 from assistant.orchestrator import Orchestrator
 
 nova = Orchestrator()
-nova.run_once()
+nova.run_forever()

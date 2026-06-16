@@ -5,9 +5,10 @@ Main controller of Nova.
 Connects all assistant components together.
 """
 
-from assistant.listener import Listener
+import time
 from assistant.transcriber import Transcriber
 from assistant.speaker import Speaker
+from assistant.listener import Listener
 
 from ai.llm_client import LLMClient
 from ai.memory_manager import MemoryManager
@@ -51,7 +52,7 @@ class Orchestrator:
          # Stop if no speech detected
         if not user_text:
             logger.warning("No speech detected")
-            return
+            return None
 
         # Extract important memory from user input
         extracted_memory = self.llm.extract_memory(user_text)
@@ -59,6 +60,9 @@ class Orchestrator:
         # Store extracted memory
         for key, value in extracted_memory.items():
             self.memory.remember(key, value)
+
+        # Small delay to avoid hitting API rate limits back-to-back
+        time.sleep(1)
 
         # Get AI response
         messages = self.build_messages(user_text)
@@ -70,6 +74,8 @@ class Orchestrator:
 
         # Speak response
         self.speaker.speak(ai_response)
+
+        return user_text    
     
     def build_messages(self, user_text):
         """
@@ -103,3 +109,30 @@ class Orchestrator:
             })
 
         return messages
+
+    def run_forever(self):
+        """
+        Keep assistant running until user ends conversation.
+        """
+
+        logger.info("Starting continuous conversation mode")
+
+        EXIT_COMMANDS = [
+            "end conversation",
+            "stop conversation",
+            "goodbye nova",
+            "exit"
+        ]
+
+        while True:
+            user_text = self.run_once()
+
+            if not user_text:
+                continue
+
+            if user_text.lower() in EXIT_COMMANDS:
+                self.speaker.speak("Ending conversation. Goodbye.")
+                logger.info("Conversation ended")
+                break
+
+   
