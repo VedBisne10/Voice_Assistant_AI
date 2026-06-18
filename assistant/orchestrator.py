@@ -5,14 +5,12 @@ Main controller of Nova.
 Connects all assistant components together.
 """
 
-import time   # Used to add a delay between API calls to avoid rate limiting
-
 # Import all the main components of the assistant
 from assistant.listener import Listener         # Records audio from microphone
 from assistant.transcriber import Transcriber   # Converts audio to text
 from assistant.speaker import Speaker           # Speaks text out loud
 
-from ai.llm_client import LLMClient         # Sends messages to the AI model and gets responses
+from ai.local_llm_client import LocalLLMClient        # Sends messages to the AI model and gets responses
 from ai.memory_manager import MemoryManager  # Manages short-term and long-term memory
 
 from utils.logger import logger              # Custom logger for info/warning messages
@@ -36,7 +34,7 @@ class Orchestrator:
         self.listener = Listener()       # Microphone recorder
         self.transcriber = Transcriber() # Speech-to-text engine
         self.speaker = Speaker()         # Text-to-speech engine
-        self.llm = LLMClient()           # AI language model client
+        self.llm = LocalLLMClient()      # AI language model client
         self.memory = MemoryManager()    # Memory and conversation history handler
 
         logger.info("Nova initialized successfully")
@@ -67,23 +65,19 @@ class Orchestrator:
         for key, value in extracted_memory.items():
             self.memory.remember(key, value)
 
-        # Step 6: Wait 1 second before the next API call
-        # Two LLM calls happen back-to-back — this gap prevents rate limit errors
-        time.sleep(1)
-
-        # Step 7: Build the full message list to send to the AI
+        # Step 6: Build the full message list to send to the AI
         # Includes system prompt, memory facts, chat history, and the new user message
         messages = self.build_messages(user_text)
 
-        # Step 8: Send the messages to the AI and get its text response
+        # Step 7: Send the messages to the AI and get its text response
         ai_response = self.llm.get_response(messages)
 
-        # Step 9: Save both the user's message and AI's response to conversation history
+        # Step 8: Save both the user's message and AI's response to conversation history
         # Done after getting the response to avoid the current message being included twice
         self.memory.add_message("user", user_text)
         self.memory.add_message("assistant", ai_response)
 
-        # Step 10: Speak the AI's response out loud
+        # Step 9: Speak the AI's response out loud
         self.speaker.speak(ai_response)
 
         # Return the user's text so run_forever() can check for exit commands
