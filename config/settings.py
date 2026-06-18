@@ -22,10 +22,10 @@ SPEECH_RATE = 180
 # How loud Nova speaks — range is 0.0 (silent) to 1.0 (maximum volume)
 SPEECH_VOLUME = 1.0
 
-# The AI model Nova uses to understand and respond to messages
-# This is an OpenRouter model ID — change this to switch to a different model
-# ":free" at the end means this is the free-tier version of the model
-MODEL_NAME = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
+# The Ollama model Nova uses to understand and respond to messages
+# This must match a model you have already pulled locally via: ollama pull <model_name>
+# Change this to switch to a different local model e.g. "llama3.2", "mistral", "phi3"
+MODEL_NAME = "qwen3.5:9b"
 
 # How many past messages to include when sending context to the AI
 # Keeping this smaller saves tokens; keeping it larger gives the AI more memory of the chat
