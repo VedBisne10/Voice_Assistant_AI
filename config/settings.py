@@ -17,15 +17,21 @@ STARTUP_MESSAGE = (
 
 # How fast Nova speaks — measured in words per minute
 # 180 is natural conversational speed; lower = slower, higher = faster
-SPEECH_RATE = 180
+SPEECH_RATE = 170
 
 # How loud Nova speaks — range is 0.0 (silent) to 1.0 (maximum volume)
 SPEECH_VOLUME = 1.0
 
+# ElevenLabs voice ID to use for Nova's voice
+# Find voice IDs at: https://elevenlabs.io/app/voice-lab
+# or by running: elevenlabs.voices() after setting your API key
+# "JBFqnCBsd6RMkjVDRZzb" = "George" — deep, clear, natural male voice
+ELEVENLABS_VOICE_ID = "JBFqnCBsd6RMkjVDRZzb"
+
 # The Ollama model Nova uses to understand and respond to messages
 # This must match a model you have already pulled locally via: ollama pull <model_name>
 # Change this to switch to a different local model e.g. "llama3.2", "mistral", "phi3"
-MODEL_NAME = "qwen3.5:9b"
+MODEL_NAME = "gemma3:12b"
 
 # How many past messages to include when sending context to the AI
 # Keeping this smaller saves tokens; keeping it larger gives the AI more memory of the chat
