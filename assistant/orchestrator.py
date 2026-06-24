@@ -56,14 +56,14 @@ class Orchestrator:
             logger.warning("No speech detected")
             return None
 
-        # Step 4: Ask the AI to pull out any important facts from what the user said
-        # e.g., name, preferences, goals — things worth remembering long-term
-        extracted_memory = self.llm.extract_memory(user_text)
+        # # Step 4: Ask the AI to pull out any important facts from what the user said
+        # # e.g., name, preferences, goals — things worth remembering long-term
+        # extracted_memory = self.llm.extract_memory(user_text)
 
-        # Step 5: Save each extracted fact into long-term memory
-        # key = fact category (e.g., "name"), value = the actual info (e.g., "Alex")
-        for key, value in extracted_memory.items():
-            self.memory.remember(key, value)
+        # # Step 5: Save each extracted fact into long-term memory
+        # # key = fact category (e.g., "name"), value = the actual info (e.g., "Alex")
+        # for key, value in extracted_memory.items():
+        #     self.memory.remember(key, value)
 
         # Step 6: Build the full message list to send to the AI
         # Includes system prompt, memory facts, chat history, and the new user message
@@ -110,7 +110,9 @@ class Orchestrator:
 
         # Add the full conversation history (previous user + assistant messages)
         # This gives the AI context so it doesn't forget what was said earlier
-        messages.extend(self.memory.get_history())
+        history = self.memory.get_history()
+        
+        messages.extend(history[-6:])
 
         # Add the current user message at the end — this is what the AI responds to
         messages.append({
