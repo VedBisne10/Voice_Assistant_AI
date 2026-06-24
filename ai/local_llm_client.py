@@ -21,7 +21,7 @@ class LocalLLMClient:
         """
 
         self.base_url = "http://localhost:11434/api/chat"
-        self.model_name = "qwen3.5:9b"
+        self.model_name = "gemma3:12b"
 
         logger.info("Local LLM Client initialized successfully")
 
@@ -52,9 +52,12 @@ class LocalLLMClient:
             json=payload
         )
 
+        # Parse Ollama's JSON response into a Python dictionary
         response_data = response.json()
 
-        logger.info(f"Raw Ollama response: {response_data}")
+        # Check that Ollama returned a valid response before accessing it
+        if "message" not in response_data:
+            raise Exception(f"Ollama Error: {response_data}")
 
         ai_response = response_data["message"]["content"]
 
