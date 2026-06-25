@@ -45,10 +45,10 @@ class Orchestrator:
         listen → transcribe → extract memory → get AI response → speak
         """
 
-        # Step 1: Record the user's voice and save it as a WAV file
+        # Record the user's voice and save it as a WAV file
         audio_file = self.listener.listen()
 
-        # Step 2: Convert the recorded audio file into a text string
+        # Convert the recorded audio file into a text string
         user_text = self.transcriber.transcribe(audio_file)
 
         # Step 3: If no speech was detected (empty string), skip this cycle
@@ -56,23 +56,23 @@ class Orchestrator:
             logger.warning("No speech detected")
             return None
 
-        # # Step 4: Ask the AI to pull out any important facts from what the user said
-        # # e.g., name, preferences, goals — things worth remembering long-term
+        # Ask the AI to pull out any important facts from what the user said
+        # e.g., name, preferences, goals — things worth remembering long-term
         # extracted_memory = self.llm.extract_memory(user_text)
 
-        # # Step 5: Save each extracted fact into long-term memory
-        # # key = fact category (e.g., "name"), value = the actual info (e.g., "Alex")
+        # Save each extracted fact into long-term memory
+        # key = fact category (e.g., "name"), value = the actual info (e.g., "Alex")
         # for key, value in extracted_memory.items():
         #     self.memory.remember(key, value)
 
-        # Step 6: Build the full message list to send to the AI
+        # Build the full message list to send to the AI
         # Includes system prompt, memory facts, chat history, and the new user message
         messages = self.build_messages(user_text)
 
-        # Step 7: Send the messages to the AI and get its text response
+        # Send the messages to the AI and get its text response
         ai_response = self.llm.get_response(messages)
 
-        # Step 8: Save both the user's message and AI's response to conversation history
+        # Save both the user's message and AI's response to conversation history
         # Done after getting the response to avoid the current message being included twice
         self.memory.add_message("user", user_text)
         self.memory.add_message("assistant", ai_response)
