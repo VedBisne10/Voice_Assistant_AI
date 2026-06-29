@@ -1,47 +1,30 @@
 """
-settings.py
-
-Stores all configurable settings for the Voice Assistant.
-If you want to tweak Nova's behavior, change values here
-instead of hunting through multiple files.
+settings.py - All the knobs you'd want to tweak in one place.
+Change things here instead of digging through the codebase.
 """
 
-# The display name of the assistant — used in greetings and logs
 ASSISTANT_NAME = "Nova"
 
-# The first thing Nova says when she starts up
-# Uses an f-string to include the assistant's name dynamically
-STARTUP_MESSAGE = (
-    f"Hello, {ASSISTANT_NAME} at your service Sir. "
-)
+STARTUP_MESSAGE = f"Hello, {ASSISTANT_NAME} at your service Sir."
 
-# How fast Nova speaks — measured in words per minute
-# 180 is natural conversational speed; lower = slower, higher = faster
+# Words per minute — 170 feels natural, go lower if she sounds rushed
 SPEECH_RATE = 170
 
-# How loud Nova speaks — range is 0.0 (silent) to 1.0 (maximum volume)
 SPEECH_VOLUME = 1.0
 
-# ElevenLabs voice ID to use for Nova's voice
-# Find voice IDs at: https://elevenlabs.io/app/voice-lab
-# or by running: elevenlabs.voices() after setting your API key
-# "JBFqnCBsd6RMkjVDRZzb" = "George" — deep, clear, natural male voice
+# ElevenLabs voice — find IDs at elevenlabs.io/app/voice-lab
+# "JBFqnCBsd6RMkjVDRZzb" is George, a clear deep male voice
 ELEVENLABS_VOICE_ID = "JBFqnCBsd6RMkjVDRZzb"
 
-# The Ollama model Nova uses to understand and respond to messages
-# This must match a model you have already pulled locally via: ollama pull <model_name>
-# Change this to switch to a different local model e.g. "llama3.2", "mistral", "phi3"
+# Ollama model — must be pulled first with: ollama pull <name>
 MODEL_NAME = "gemma3:12b"
 
-# How many past messages to include when sending context to the AI
-# Keeping this smaller saves tokens; keeping it larger gives the AI more memory of the chat
-# e.g., 10 means the last 10 messages (5 user + 5 assistant turns)
+# How many past messages to send as context to the model
+# More = better memory of the conversation, but slower responses
 MAX_CONVERSATION_HISTORY = 10
 
-# Whether to print log messages in the terminal while Nova is running
-# Set to False to silence terminal output (logs will still be written to file)
+# Toggle terminal logs on/off
 ENABLE_CONSOLE_LOGS = True
 
-# How many seconds to wait before Nova starts listening again after speaking
-# Prevents Nova from picking up her own voice as the next user input
+# Pause before listening again — stops Nova from hearing her own voice
 LISTENING_DELAY = 1
