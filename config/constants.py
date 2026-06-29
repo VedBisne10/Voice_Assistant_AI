@@ -1,43 +1,23 @@
 """
-constants.py
-
-Stores constant paths and fixed values used across the project.
-These values don't change during runtime — they define where files live
-and what Nova's core personality/instructions are.
+constants.py - File paths and the system prompt. Doesn't change at runtime.
 """
 
-# Path is used to work with file/folder paths safely across Windows, Linux, and Mac
-# It's better than plain strings because it handles slashes automatically
 from pathlib import Path
 
-# __file__ = the full path to this file (constants.py)
-# .resolve() = converts it to an absolute path (no relative ".." parts)
-# .parent = goes one folder up (from config/ to VoiceAssistant/)
-# .parent again = goes up one more level if needed — here it gives us the project root
+# Walk up two levels from this file to get to the project root
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-# The folder where all data files (memory, history, audio) are stored
-DATA_FOLDER = PROJECT_ROOT / "data"
-
-# Full path to the JSON file that stores long-term memory facts about the user
-MEMORY_FILE = DATA_FOLDER / "memory.json"
-
-# Full path to the JSON file that stores the conversation history (chat log)
+DATA_FOLDER              = PROJECT_ROOT / "data"
+MEMORY_FILE              = DATA_FOLDER  / "memory.json"
 CONVERSATION_HISTORY_FILE = DATA_FOLDER / "conversation_history.json"
+LOG_FOLDER               = DATA_FOLDER  / "logs"
+ASSETS_FOLDER            = PROJECT_ROOT / "assets"
 
-# Folder where log files are written (one log file per session/day)
-LOG_FOLDER = DATA_FOLDER / "logs"
-
-# Folder where icons, sounds, and wake word models are stored
-ASSETS_FOLDER = PROJECT_ROOT / "assets"
-
-# Path to the temporary WAV file created every time the user speaks
-# This file gets overwritten on each recording — it's not saved permanently
+# Gets overwritten every recording — not meant to be kept
 TEMP_AUDIO_FILE = DATA_FOLDER / "temp_audio.wav"
 
-# The system prompt that defines who Nova is and how she should behave
-# This is sent to the AI at the start of every conversation as a "role" instruction
-# Think of it as the personality and rule sheet for the AI
+# Nova's personality and rules. Also lists the tools she can use
+# so the model knows when to return JSON instead of plain text.
 SYSTEM_PROMPT = """
     You are Nova, a desktop voice assistant created by Ved.
 
@@ -51,4 +31,36 @@ SYSTEM_PROMPT = """
     - Respond ONLY with the final answer.
     - Prefer 1-3 sentences unless detailed explanation is requested.
     - Avoid markdown, bullet points, and long formatting.
+
+    TOOLS:
+    When the user asks you to perform an action, respond with ONLY this JSON (no other text):
+    {"tool": "<tool_name>", "parameters": {<key>: <value>}}
+
+    Available tools:
+    - open_app(app_name)                — Open an app e.g. "chrome", "spotify"
+    - search_web(query)                 — Search Google
+    - open_website(url)                 — Open a specific website
+    - compose_email(to, subject, body)  — Open Gmail with a pre-filled draft
+    - open_folder(folder_name)          — Open a folder e.g. "downloads"
+    - open_file(file_path)              — Open a file at a specific path
+    - find_file(file_name, folder_name) — Search for a file by name in a folder
+    - get_time()                        — Current time
+    - get_date()                        — Today's date
+    - take_screenshot()                 — Take a screenshot
+    - set_volume(level)                 — Set volume 0-100
+    - lock_screen()                     — Lock the computer
+    - shutdown_system()                 — Shut down
+    - restart_system()                  — Restart
+
+    Examples:
+    User: "Open Chrome"
+    Response: {"tool": "open_app", "parameters": {"app_name": "chrome"}}
+
+    User: "Search for the weather in London"
+    Response: {"tool": "search_web", "parameters": {"query": "weather in London"}}
+
+    User: "What time is it"
+    Response: {"tool": "get_time", "parameters": {}}
+
+    For everything else, respond normally in plain text.
 """
