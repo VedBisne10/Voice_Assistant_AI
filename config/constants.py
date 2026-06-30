@@ -2,19 +2,19 @@
 constants.py - File paths and the system prompt. Doesn't change at runtime.
 """
 
-from pathlib import Path
+from pathlib import Path  # cross-platform path handling — avoids hardcoding backslashes everywhere
 
 # Walk up two levels from this file to get to the project root
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent  # __file__ is constants.py, .parent.parent climbs to VoiceAssistant/
 
-DATA_FOLDER              = PROJECT_ROOT / "data"
-MEMORY_FILE              = DATA_FOLDER  / "memory.json"
-CONVERSATION_HISTORY_FILE = DATA_FOLDER / "conversation_history.json"
-LOG_FOLDER               = DATA_FOLDER  / "logs"
-ASSETS_FOLDER            = PROJECT_ROOT / "assets"
+DATA_FOLDER              = PROJECT_ROOT / "data"  # the data/ directory where memory and history files live
+MEMORY_FILE              = DATA_FOLDER  / "memory.json"  # stores long-term facts about the user
+CONVERSATION_HISTORY_FILE = DATA_FOLDER / "conversation_history.json"  # stores the recent conversation turns
+LOG_FOLDER               = DATA_FOLDER  / "logs"  # where log files would go if file logging is added later
+ASSETS_FOLDER            = PROJECT_ROOT / "assets"  # icons, sounds, wake word models — static files
 
 # Gets overwritten every recording — not meant to be kept
-TEMP_AUDIO_FILE = DATA_FOLDER / "temp_audio.wav"
+TEMP_AUDIO_FILE = DATA_FOLDER / "temp_audio.wav"  # single reused file path for each mic recording — gets overwritten each turn
 
 # Nova's personality and rules. Also lists the tools she can use
 # so the model knows when to return JSON instead of plain text.
@@ -63,4 +63,4 @@ SYSTEM_PROMPT = """
     Response: {"tool": "get_time", "parameters": {}}
 
     For everything else, respond normally in plain text.
-"""
+"""  # the full system prompt sent at the top of every request — defines Nova's personality, keeps responses short, and teaches the model when and how to use tools
