@@ -79,23 +79,34 @@ class Orchestrator:  # main class — owns all the components and drives the con
 
         return messages  # hand back the complete message list, ready for the LLM
 
-    def run_forever(self):  # the infinite loop that keeps Nova listening until the user says goodbye
-        logger.info("Starting continuous conversation mode")  # log that we're entering the main loop
+    def run_forever(self):  # keeps nova running until user says stop, then returns so wake word loop can take over
+        logger.info("Starting continuous conversation mode")
 
-        EXIT_COMMANDS = [  # phrases that will cleanly end the session
-            "end conversation",  # one way to stop
-            "stop conversation",  # another way
-            "goodbye nova",  # natural farewell
-            "exit"  # simple kill word
+        # words/phrases that mean the user wants to stop
+        EXIT_COMMANDS = [
+            "end conversation",
+            "stop conversation",
+            "goodbye nova",
+            "goodbye, nova",
+            "exit",
+            "stop",
+            "bye",
+            "bye nova",
+            "bye, nova",
+            "shut down",
+            "turn off",
         ]
 
-        while True:  # keep going until we hit a break
-            user_text = self.run_once()  # run one full turn and get back what the user said
+        while True:
+            user_text = self.run_once()
 
-            if not user_text:  # nothing was heard or transcribed this turn
-                continue  # skip the exit check and just try again immediately
+            if not user_text:  # nothing heard, try again
+                continue
 
-            if user_text.lower() in EXIT_COMMANDS:  # check if the user's words match any exit phrase
-                self.speaker.speak("Ending conversation. Goodbye.")  # say a proper goodbye before exiting
-                logger.info("Conversation ended")  # log the clean exit
-                break  # exit the loop, which lets the program terminate naturally
+            # strip punctuation whisper sometimes adds (commas, periods, etc.)
+            # then check if any exit phrase appears anywhere in what was said
+            user_lower = user_text.lower().strip().rstrip(".,!?")
+            if any(cmd in user_lower for cmd in EXIT_COMMANDS):
+                self.speaker.speak("Ending conversation. Goodbye.")
+                logger.info("Conversation ended")
+                break

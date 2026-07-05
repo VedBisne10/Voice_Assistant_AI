@@ -20,7 +20,7 @@ class LocalLLMClient:  # wraps all the Ollama API calls so the rest of the code 
 
     def __init__(self):  # constructor — sets the endpoint, model name, and verifies the server is up
         self.base_url = "http://localhost:11434/api/chat"  # Ollama's chat API endpoint — runs on port 11434 by default
-        self.model_name = "gemma3:12b"  # the model we're using — must be pulled first with: ollama pull gemma3:12b
+        self.model_name = "ministral-3:8b-cloud "  # the model we're using — must be pulled first with: ollama pull gemma3:12b
 
         logger.info("Local LLM Client initialized successfully")  # log that the config is set
 
