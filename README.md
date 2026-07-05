@@ -7,7 +7,7 @@ Nova is a fully local, offline-capable voice assistant that runs on your machine
 ## Demo
 
 > 📹 **[Watch Demo](#)**
-> *(link coming soon)*
+> *https://drive.google.com/file/d/1zoyujw9tADMCha4rgsTeSZ7PYd1ZREh_/view?usp=sharing*
 
 ---
 
