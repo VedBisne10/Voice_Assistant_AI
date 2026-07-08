@@ -37,7 +37,7 @@ Nova is a fully local, offline-capable voice assistant that runs on your machine
 | Layer | Technology |
 |---|---|
 | **Speech to Text** | [Faster Whisper](https://github.com/SYSTRAN/faster-whisper) (small model, CPU, int8) |
-| **AI / LLM** | [Gemma3:12b](https://ollama.com/library/gemma3) via [Ollama](https://ollama.com) |
+| **AI / LLM** | [ministral-3:8b-cloud](https://ollama.com/library/gemma3) via [Ollama](https://ollama.com) |
 | **Text to Speech** | [ElevenLabs](https://elevenlabs.io) (eleven_turbo_v2_5) |
 | **Audio Playback** | Windows Media Foundation via PowerShell |
 | **Audio Recording** | [SoundDevice](https://python-sounddevice.readthedocs.io) + [SoundFile](https://python-soundfile.readthedocs.io) |
